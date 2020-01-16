@@ -1,37 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace NavigableCollection
 {
-    public class Navigable<T> : List<NavigableEntry<T>>
+    public class Navigable<T> : IEnumerable<NavigableEntry<T>>
     {
+        private readonly IEnumerable<T> _items;
+
         public Navigable(IEnumerable<T> items)
         {
-            AddRange(BuildCollection(items));
+            _items = items;
         }
+        
+        public IEnumerator<NavigableEntry<T>> GetEnumerator() => new NavigableEnumerator<T>(_items);
 
-        private static IEnumerable<NavigableEntry<T>> BuildCollection(IEnumerable<T> items)
-        {
-            T pastItem = default;
-            NavigableEntry<T> pastEntry = default;
-            
-            foreach (var currentItem in items)
-            {
-                var entry = new NavigableEntry<T>
-                {
-                    Previous = pastItem,
-                    Current = currentItem
-                };
-                
-                if (pastEntry != null)
-                {
-                    pastEntry.Next = entry.Current;
-                }
-
-                yield return entry;
-
-                pastItem = currentItem;
-                pastEntry = entry;
-            }
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

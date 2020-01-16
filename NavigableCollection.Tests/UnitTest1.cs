@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using JetBrains.dotMemoryUnit;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -11,21 +12,26 @@ namespace NavigableCollection.Tests
         public void TestMethod1()
         {
             dotMemory.Check();
+
             var stringItems = new[]
             {
                     "hello",
                     "world",
-                    "!"
+                    "!",
+                    "a",
+                    "b",
+                    "c"
             };
-            var navigableCollection = new Navigable<string>(stringItems);
+            var navigableCollection = stringItems.ToNavigable()
+                                                 .ToList();
 
             dotMemory.Check(memory =>
             {
-                var objectSet = memory.GetObjects(where => where.Type.Is<NavigableEntry<string>>());
+                var objectSet = memory.GetObjects(where => @where.Type.Is<string>());
 
                 Console.WriteLine("{0} objects found, with a total size of {1}",
                         objectSet.ObjectsCount,
-                        objectSet.SizeInBytes);
+                        FileSizeHelper.GetHumanReadableFileSize(objectSet.SizeInBytes));
 
                 Console.WriteLine("Total size of: {0}", FileSizeHelper.GetHumanReadableFileSize(memory.SizeInBytes));
             });
