@@ -17,23 +17,26 @@ namespace NavigableCollection.Tests
             {
                     "hello",
                     "world",
-                    "!"
+                    "!",
+                    "a",
+                    "b",
+                    "c"
             };
             var navigableCollection = stringItems.ToNavigable()
-                                                 .ToArray();
+                                                 .ToList();
 
             dotMemory.Check(memory =>
             {
-                var objectSet = memory.GetObjects(where => @where.Type.Is<NavigableEntry<string>>());
+                var objectSet = memory.GetObjects(where => @where.Type.Is<string>());
 
                 Console.WriteLine("{0} objects found, with a total size of {1}",
                         objectSet.ObjectsCount,
-                        objectSet.SizeInBytes);
+                        FileSizeHelper.GetHumanReadableFileSize(objectSet.SizeInBytes));
 
                 Console.WriteLine("Total size of: {0}", FileSizeHelper.GetHumanReadableFileSize(memory.SizeInBytes));
             });
 
-            for (var index = 0; index < navigableCollection.Length; index++)
+            for (var index = 0; index < navigableCollection.Count; index++)
             {
                 var navigableEntry = navigableCollection[index];
 

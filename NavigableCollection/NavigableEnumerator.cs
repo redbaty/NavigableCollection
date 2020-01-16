@@ -9,11 +9,6 @@ namespace NavigableCollection
         private ICollection<T> _items;
         private int _position = -1;
 
-        public NavigableEnumerator(ICollection<T> items)
-        {
-            _items = items;
-        }
-
         public NavigableEnumerator(IEnumerable<T> items)
         {
             _items = items is ICollection<T> itemsCollection ? itemsCollection : items.ToArray();
