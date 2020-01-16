@@ -12,22 +12,33 @@ namespace NavigableCollection.Tests
         public void TestMethod1()
         {
             dotMemory.Check();
-            
-            var stringItems = new[] {"hello", "world", "!"};
-            var navigableCollection = stringItems.ToNavigable().ToArray();
-            
+
+            var stringItems = new[]
+            {
+                    "hello",
+                    "world",
+                    "!"
+            };
+            var navigableCollection = stringItems.ToNavigable()
+                                                 .ToArray();
+
             dotMemory.Check(memory =>
             {
                 var objectSet = memory.GetObjects(where => @where.Type.Is<NavigableEntry<string>>());
-                Console.WriteLine(objectSet.SizeInBytes);
+
+                Console.WriteLine("{0} objects found, with a total size of {1}",
+                        objectSet.ObjectsCount,
+                        objectSet.SizeInBytes);
+
+                Console.WriteLine("Total size of: {0}", FileSizeHelper.GetHumanReadableFileSize(memory.SizeInBytes));
             });
-            
+
             for (var index = 0; index < navigableCollection.Length; index++)
             {
                 var navigableEntry = navigableCollection[index];
 
-                Assert.AreEqual(navigableEntry.Current,stringItems[index]);
-                
+                Assert.AreEqual(navigableEntry.Current, stringItems[index]);
+
                 if (index < 2)
                 {
                     Assert.AreEqual(navigableEntry.Next, stringItems[index + 1]);
