@@ -2,10 +2,17 @@
 {
     public class NavigableEntry<T>
     {
-        public T Previous { get; set; }
-        
-        public T Current { get; set; }
-        
-        public T Next { get; set; }
+        internal NavigableEntry(T previous, T current, T next)
+        {
+            Previous = previous;
+            Current = current;
+            Next = next;
+        }
+
+        public T Current { get; }
+
+        public T Next { get; }
+
+        public T Previous { get; }
     }
 }

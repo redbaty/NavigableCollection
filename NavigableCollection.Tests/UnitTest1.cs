@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NavigableCollection.Tests
@@ -9,9 +10,9 @@ namespace NavigableCollection.Tests
         public void TestMethod1()
         {
             var stringItems = new[] {"hello", "world", "!"};
-            var navigableCollection = new Navigable<string>(stringItems);
-
-            for (var index = 0; index < navigableCollection.Count; index++)
+            var navigableCollection = stringItems.ToNavigable().ToArray();
+            
+            for (var index = 0; index < navigableCollection.Length; index++)
             {
                 var navigableEntry = navigableCollection[index];
 
