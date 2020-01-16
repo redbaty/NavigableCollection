@@ -21,11 +21,13 @@ namespace NavigableCollection.Tests
 
             dotMemory.Check(memory =>
             {
-                var objectSet = memory.GetObjects(where => @where.Type.Is<NavigableEntry<string>>());
+                var objectSet = memory.GetObjects(where => where.Type.Is<NavigableEntry<string>>());
 
                 Console.WriteLine("{0} objects found, with a total size of {1}",
                         objectSet.ObjectsCount,
                         objectSet.SizeInBytes);
+
+                Console.WriteLine("Total size of: {0}", FileSizeHelper.GetHumanReadableFileSize(memory.SizeInBytes));
             });
 
             for (var index = 0; index < navigableCollection.Count; index++)
