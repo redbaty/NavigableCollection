@@ -18,7 +18,7 @@ namespace NavigableCollection.Tests
             
             dotMemory.Check(memory =>
             {
-                var objectSet = memory.GetObjects(where => @where.Type.Is<NavigableEntry<string>[]>());
+                var objectSet = memory.GetObjects(where => @where.Type.Is<NavigableEntry<string>>());
                 Console.WriteLine(objectSet.SizeInBytes);
             });
             
