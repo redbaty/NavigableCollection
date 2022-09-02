@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard1.0</TargetFramework>
+        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+        <PackageProjectUrl>https://github.com/redbaty/NavigableCollection</PackageProjectUrl>
+        <PackageVersion>1.0.2</PackageVersion>
     </PropertyGroup>
 
 </Project>
