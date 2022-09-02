@@ -1,18 +1,11 @@
 ﻿namespace NavigableCollection
 {
-    public class NavigableEntry<T>
+    public record NavigableEntry<T>
     {
-        internal NavigableEntry(T previous, T current, T next)
-        {
-            Previous = previous;
-            Current = current;
-            Next = next;
-        }
-
-        public T Current { get; }
-
-        public T Next { get; }
-
-        public T Previous { get; }
+        public T Previous { get; init; }
+        
+        public T Current { get; init; }
+        
+        public T Next { get; init; }
     }
 }

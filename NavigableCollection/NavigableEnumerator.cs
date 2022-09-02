@@ -1,39 +1,77 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NavigableCollection
 {
     public class NavigableEnumerator<T> : IEnumerator<NavigableEntry<T>>
     {
-        private ICollection<T> _items;
-        private int _position = -1;
+        private IEnumerator<T> Enumerator { get; }
+        private int Position { get; set; } = -1;
+        private bool Last { get; set; }
+        private int LastCount { get; set; }
+        private DropOutLinkedList<T> LoadedItems { get; } = new(3);
 
-        public NavigableEnumerator(IEnumerable<T> items)
+        private bool MoveItemsNext()
         {
-            _items = items is ICollection<T> itemsCollection ? itemsCollection : items.ToArray();
+            if (Enumerator.MoveNext())
+            {
+                LoadedItems.Push(Enumerator.Current);
+                return true;
+            }
+            
+            if (!Last)
+            {
+                Last = true;
+                LoadedItems.Push(default);
+            }
+
+            return false;
         }
 
         public bool MoveNext()
         {
-            _position++;
-            return _position < _items.Count;
+            if (Position < 0)
+            {
+                if (!MoveItemsNext())
+                    return false;
+            }
+
+            Position++;
+            MoveItemsNext();
+            
+            Current = new NavigableEntry<T>
+            {
+                Previous = LoadedItems.AtIndex(2),
+                Current = LoadedItems.AtIndex(1),
+                Next = LoadedItems.AtIndex(0)
+            };
+            
+            if (Last)
+            {
+                LastCount++;
+            }
+
+            return LastCount <= 1;
+        }
+
+        public NavigableEnumerator(IEnumerable<T> items)
+        {
+            Enumerator = items.GetEnumerator();
         }
 
         public void Reset()
         {
-            _position = -1;
+            Position = -1;
+            Enumerator.Reset();
         }
 
-        public NavigableEntry<T> Current => new NavigableEntry<T>(_items.ElementAtOrDefault(_position - 1),
-                _items.ElementAt(_position),
-                _items.ElementAtOrDefault(_position + 1));
+        public NavigableEntry<T> Current { get; set; }
 
         object IEnumerator.Current => Current;
 
         public void Dispose()
         {
-            _items = null;
+            Enumerator.Dispose();
         }
     }
 }
